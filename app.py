@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+    app
+    ~~~~~~~~~~~~~~
+    Initialize the entire Flask application
+    :copyright: (c) 2021 by Luis Rdz
+"""
 import os
 from dotenv import load_dotenv
 
@@ -6,6 +13,7 @@ load_dotenv(dotenv_path)
 
 from config import app
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     port = os.getenv("FLASK_RUN_PORT", 5000)
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=True, host="0.0.0.0", port=port)

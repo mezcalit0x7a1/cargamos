@@ -1,4 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+    models.categories
+    ~~~~~~~~~~~~~~
+    Categories ORM model
+    :copyright: (c) 2021 by Luis Rdz
+"""
 from config import db
+
 
 class CategoriesModel(db.Model):
 
@@ -7,4 +15,5 @@ class CategoriesModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-    products = db.relationship('ProductsModel', back_populates='category')
+    #: FK
+    products = db.relationship("ProductsModel", back_populates="category")

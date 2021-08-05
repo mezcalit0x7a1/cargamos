@@ -1,4 +1,12 @@
-from config import api, db
+# -*- coding: utf-8 -*-
+"""
+    models.stores
+    ~~~~~~~~~~~~~~
+    Store ORM model
+    :copyright: (c) 2021 by Luis Rdz
+"""
+from config import db
+
 
 class StoresModel(db.Model):
 

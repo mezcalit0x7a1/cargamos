@@ -1,7 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+    config.flask
+    ~~~~~~~~~~~~~~
+    Instance Flask
+    :copyright: (c) 2021 by Luis Rdz
+"""
 import os
-import logging
 from flask import Flask
-from logging.config import dictConfig
+
 
 class Config(object):
 
@@ -15,6 +21,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = f"{DB_API}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 
     BUNDLE_ERRORS = True
+
 
 app = Flask(__name__)
 app.config.from_object(Config)

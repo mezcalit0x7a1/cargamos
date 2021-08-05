@@ -1,4 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+    models.branches
+    ~~~~~~~~~~~~~~
+    Branches ORM model
+    :copyright: (c) 2021 by Luis Rdz
+"""
 from config import db
+
 
 class BranchesModel(db.Model):
 
@@ -7,4 +15,5 @@ class BranchesModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-    products = db.relationship('ProductsModel', back_populates='branch')
+    #: FK
+    products = db.relationship("ProductsModel", back_populates="branch")
