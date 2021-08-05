@@ -64,3 +64,21 @@ class StoreProd(Resource):
                 abort(400, message="Out of stock")
         else:
             abort(400, message="Invalid quantity")
+
+    def put(self, id):
+        data = store_products_parser.parse_args(strict=True)
+        store_product = StoreProductsModel.query.get(id)
+        if store_product:
+            store_product.sku = data["sku"]
+            store_product.stock = data["stock"]
+            store_product.price = data["price"]
+            store_product.product_id = data["product_id"]
+            store_product.store_id = data["store_id"]
+            try:
+                db.session.add(store_product)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                abort(500, message=str(e))
+            return {}, 204
+        abort(404, message="Store product does not exist")

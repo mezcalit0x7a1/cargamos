@@ -12,6 +12,25 @@ def client():
         yield client
 
 
+def test_add_inventory(client):
+    response = client.get("/store_products/stores/1")
+    json_data = response.get_json()
+    assert response.status_code == 200
+    for data in json_data["resource"]:
+        id = data["id"]
+        sku = data["sku"]
+        stock = data["stock"]
+        price = data["price"]
+        product_id = data["product_id"]
+        store_id = data["store_id"]
+        if stock < 5:
+            new_stock = randint(50, 150)
+            req_data = {"sku": sku, "stock": new_stock, "price": price, "product_id": product_id, "store_id": store_id}
+            print(f"Adding store products to id ---> {id}")
+            update_response = client.put(f"/store_products/{id}", json=req_data)
+            assert update_response.status_code == 204
+
+
 def test_get_stores(client):
     response = client.get("/stores")
     assert response.status_code == 200
