@@ -7,11 +7,21 @@ from schemas.branches import branches_fields , branches_parser
 class Branches(Resource):
     @api.marshal_with(branches_fields, envelope='resource')
     def get(self):
+        """Get all branches
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         branch = db.session.query(BranchesModel).all()
         return branch, 200
 
     @api.marshal_with(branches_fields, envelope='resource')
     def post(self):
+        """Create branch
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         data = branches_parser.parse_args(strict=True)
         branch = BranchesModel(**data)
         try:
@@ -26,12 +36,28 @@ class Branches(Resource):
 class Branch(Resource):
     @api.marshal_with(branches_fields, envelope='resource')
     def get(self, id):
+        """Get branch from DB
+
+        Args:
+            id (int): Branch id
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         branch = BranchesModel.query.get(id)
         if branch:
             return branch, 200
         abort(404, message="Branch does not exist")
 
     def put(self, id):
+        """Update branch from DB
+
+        Args:
+            id (int): Branch id
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         data = branches_parser.parse_args(strict=True)
         branch = BranchesModel.query.get(id)
         if branch:
@@ -46,6 +72,14 @@ class Branch(Resource):
         abort(404, message="Branch does not exist")
 
     def delete(self, id):
+        """Delete branch from DB
+
+        Args:
+            id (int): Branch id
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         branch = BranchesModel.query.get(id)
         if branch:
             try:

@@ -1,11 +1,23 @@
+# -*- coding: utf-8 -*-
+"""
+    test.test_flaskr
+    ~~~~~~~~~~~~~~
+    API test
+    :copyright: (c) 2021 by Luis Rdz
+"""
 import pytest
+import asyncio
 from app import app
 from random import randint
-import asyncio
 
 
 @pytest.fixture
 def client():
+    """Get app object
+
+    Yields:
+        object: Flask app
+    """    
     with app.test_client() as client:
         with app.app_context():
             pass
@@ -13,6 +25,11 @@ def client():
 
 
 def test_add_inventory(client):
+    """Get products from a store, then add stock
+
+    Args:
+        client (object): Flask app
+    """    
     response = client.get("/store_products/stores/1")
     json_data = response.get_json()
     assert response.status_code == 200
@@ -32,11 +49,21 @@ def test_add_inventory(client):
 
 
 def test_get_stores(client):
+    """Get stores
+
+    Args:
+        client (object): Flask app
+    """    
     response = client.get("/stores")
     assert response.status_code == 200
 
 
 def test_get_store(client):
+    """Get store by id
+
+    Args:
+        client (object): Flask app
+    """
     response = client.get("/stores/3")
     assert response.status_code == 200
 
@@ -56,6 +83,11 @@ def test_get_store(client):
 
 
 def test_update_stores(client):
+    """Make a test updating a store
+
+    Args:
+        client (object): Flask app
+    """    
     data = {
         "name": "Gamer Store",
         "address": "Fornite #123 col. Sin Tiempo",
@@ -70,12 +102,24 @@ def test_update_stores(client):
 
 
 def test_unique_keys(client):
+    """Make a test with UNIQUE attributes
+
+    Args:
+        client (object): Flask app
+    """    
     data = {"sku": "WEBUSB9087234", "stock": 98, "price": 666, "product_id": 6, "store_id": 1}
     response = client.post("/store_products", json=data)
     assert response.status_code == 400
 
 
 async def buy(client, data, number):
+    """Execute asyncio to remove products from stock
+
+    Args:
+        client (object): Flask app
+        data (dict): data request
+        number (int): iteration number
+    """    
     log = {"request": number, "quantity": data["quantity"], "response_code": 0, "message": "", "stock": "?"}
     response = client.patch("/store_products/1", json=data)
     json_data = response.get_json()
@@ -93,6 +137,11 @@ async def buy(client, data, number):
 
 
 async def main(client):
+    """Async function to log how products are removed from stock
+
+    Args:
+        client (object): Flask app
+    """    
     tasks = []
     for number in range(0, 150):
         quantity = randint(1, 7)
@@ -110,4 +159,9 @@ async def main(client):
 
 
 def testing_stock(client):
+    """Execute asyncio to remove products from stock
+
+    Args:
+        client (object): Flask app
+    """    
     asyncio.run(main(client))

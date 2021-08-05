@@ -7,11 +7,21 @@ from schemas.categories import categories_fields , categories_parser
 class Categories(Resource):
     @api.marshal_with(categories_fields, envelope='resource')
     def get(self):
+        """Get all categories
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         category = db.session.query(CategoriesModel).all()
         return category, 200
 
     @api.marshal_with(categories_fields, envelope='resource')
     def post(self):
+        """Create category
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         data = categories_parser.parse_args(strict=True)
         category = CategoriesModel(**data)
         try:
@@ -26,6 +36,14 @@ class Categories(Resource):
 class Category(Resource):
     @api.marshal_with(categories_fields, envelope='resource')
     def get(self, id):
+        """Get category from DB
+
+        Args:
+            id (int): Category id
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         category = CategoriesModel.query.get(id)
         if category:
             return category, 200
@@ -46,6 +64,14 @@ class Category(Resource):
         abort(404, message="Category does not exist")
 
     def delete(self, id):
+        """Delete category from DB
+
+        Args:
+            id (int): Category id
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         category = CategoriesModel.query.get(id)
         if category:
             try:
