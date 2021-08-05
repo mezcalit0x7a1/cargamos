@@ -103,8 +103,3 @@ class Store(Resource):
                 abort(500, message=str(e))
             return {}, 200
         abort(404, message="Store does not exist")
-
-
-# class ProductsInStore(Resource):
-#     def get(self, id):
-#         store = ProductsInStore.query.get(id)

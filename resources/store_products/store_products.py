@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+    resources.store_products.store_products
+    ~~~~~~~~~~~~~~
+    Store CRUD Resources
+    :copyright: (c) 2021 by Luis Rdz
+"""
 from sqlalchemy import and_, or_
 from config import api, db
 from flask_restx import Resource, abort
@@ -8,6 +15,11 @@ from schemas.store_products import store_products_fields, store_products_parser,
 class StoreProduct(Resource):
     @api.marshal_with(store_products_fields, envelope="resource")
     def post(self):
+        """Create Products for a store
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         data = store_products_parser.parse_args(strict=True)
         store_id = data["store_id"]
         product_id = data["product_id"]
@@ -40,6 +52,14 @@ class StoreProduct(Resource):
 class StoreProducts(Resource):
     @api.marshal_with(store_products_fields, envelope="resource")
     def get(self, id):
+        """Get all products from a specific storage
+
+        Args:
+            id (int): Store id
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         store_product = db.session.query(StoreProductsModel).filter(StoreProductsModel.store_id == id).all()
         return store_product, 200
 
@@ -47,6 +67,14 @@ class StoreProducts(Resource):
 class StoreProd(Resource):
     @api.marshal_with(store_products_fields, envelope="resource")
     def patch(self, id):
+        """API to simulate a sale and reduce stock
+
+        Args:
+            id (int): Product storage id
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         data = store_products_stock.parse_args(strict=True)
         store_product = StoreProductsModel.query.get(id)
         quantity = data["quantity"]
@@ -66,6 +94,14 @@ class StoreProd(Resource):
             abort(400, message="Invalid quantity")
 
     def put(self, id):
+        """Update product storage
+
+        Args:
+            id (int): Product storage id
+
+        Returns:
+            restx.Response: standard HTTP JSON response.
+        """
         data = store_products_parser.parse_args(strict=True)
         store_product = StoreProductsModel.query.get(id)
         if store_product:
